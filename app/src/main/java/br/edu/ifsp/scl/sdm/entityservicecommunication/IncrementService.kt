@@ -7,6 +7,7 @@ import android.os.HandlerThread
 import android.os.IBinder
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 
 class IncrementService : Service() {
 
@@ -15,7 +16,9 @@ class IncrementService : Service() {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             msg.data.getInt("VALUE").also {
-                InterEntityCommunication.valueLiveData.postValue(it + 1)
+                Intent("INCREMENT_VALUE_ACTION").putExtra("VALUE", it + 1).apply {
+                    sendBroadcast(this)
+                }
             }
             stopSelf()
         }
